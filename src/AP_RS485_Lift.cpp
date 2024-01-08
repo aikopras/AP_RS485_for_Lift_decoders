@@ -66,7 +66,8 @@ RS485 NG485 (read, available, send, BUFFER_SIZE);
 
 // SendMsg is a private method that calls the NG485 object for the actual sending
 void RS485_Lift::sendMsg (const byte * data, const byte length) {
-  digitalWrite(RS485_ENABLE, HIGH);   // Enable sending
+  digitalWrite(RS485_ENABLE_SMD, HIGH);   // Enable sending
+  digitalWrite(RS485_ENABLE_THT, HIGH);   // Enable sending
   NG485.sendMsg (data, length);
   // As descibed on https://www.gammon.com.au/forum/?id=11428, the RS485 chip might be
   // "turned off" too quickly, because the last byte is still being sent from the serial
@@ -77,7 +78,8 @@ void RS485_Lift::sendMsg (const byte * data, const byte length) {
     UCSRXA |= 1 << TXCX;              // mark transmission not complete
   while (!(UCSRXA & (1 << TXCX)));    // Wait for the transmission to complete
   // Now we can disable the RS485 sender
-  digitalWrite(RS485_ENABLE, LOW);
+  digitalWrite(RS485_ENABLE_SMD, LOW);
+  digitalWrite(RS485_ENABLE_THT, LOW);
 }
 
 
@@ -86,8 +88,10 @@ void RS485_Lift::sendMsg (const byte * data, const byte length) {
 //******************************************************************************************************
 // The constructor below initialises the object
 RS485_Lift::RS485_Lift(const byte addres) {
-  pinMode(RS485_ENABLE, OUTPUT);
-  digitalWrite(RS485_ENABLE, LOW);     // Initialise as listening
+  pinMode(RS485_ENABLE_SMD, OUTPUT);
+  digitalWrite(RS485_ENABLE_SMD, LOW);     // Initialise as listening
+  pinMode(RS485_ENABLE_THT, OUTPUT);
+  digitalWrite(RS485_ENABLE_THT, LOW);     // Initialise as listening
   USART.begin (USART_SPEED);
   NG485.begin ();                      // Allocate memory for a buffer with size BUFFER_SIZE
   my_addres = addres;                  // Set the RS485 address of this decoder

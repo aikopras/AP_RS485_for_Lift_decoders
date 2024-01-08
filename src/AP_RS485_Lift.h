@@ -4,6 +4,7 @@
 // author:    Aiko Pras
 // history:   2021-03-06 V0.1 ap First version
 //            2022-01-18 V1.1 ap Library name changed. IR added
+//            2024-01-07 V1.2 ap Added a second Enable pin, to allow two boards (SMD amd THT)
 //
 // purpose:   Wrapper around Nick Gammon's Non-blocking RS485 class
 //            All RS485 details will be hidden here.
@@ -11,9 +12,10 @@
 //*****************************************************************************************************
 #pragma once
 
-// Hardware settings. Maybe changed for other hardware
+// Hardware settings. May be changed for other hardware
 #define USART_NUMBER  3            // Decide which USART) will be used: 0, 1, 2 or 3
-#define RS485_ENABLE  PIN_PJ2      // Pin to enable / disable the 485 hardware chip
+#define RS485_ENABLE_SMD  PIN_PJ2  // SMD Board: Pin to enable / disable the 485 hardware chip
+#define RS485_ENABLE_THT  PIN_PE4  // THT Board: Pin to enable / disable the 485 hardware chip
 
 
 //*****************************************************************************************************
