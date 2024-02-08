@@ -30,12 +30,17 @@ The software is written for ATMega 2560 processors, such as used by the Arduino 
 General wiring and installation of RS485 is described on a [dedicate page](extras/Wiring.md). Two additional pages exists to provide the details for RS485 usage on the [SMD board](extras/SMD-board.md) and [THT board](extras/THT-board.md).
 
 ## Testing ##
-Two test programs can be found in the examples section of this library: one sketch to
-[test the RS485 master](examples/Test-Master/Test-Master.ino) and another to [test the RS485 slave](examples/Test-Slave/Test-Slave.ino).
+By using the sketches that can be found in the examples section of this library, two different tests can be performed. The first is an initial test of the RS485 hardware and wiring; this test doesn't use anything from this library yet. After successful completion of the first test, the second test can be performed, in which the actual library's software is tested.
+Both tests require (at least) two boards to be connected: one as master and the other as slave.
 
-- **Master:** at startup, the red onboard LED will be switched on. Every 100 ms the master will send a RS485 message to the slave, and switch its own red LED off. After the slave receives the RS485 message, it will immediately return a reply message. Once the reply message from the slave is received by the master, the red master LED will be switched on again. Since the reply message should be received within a few ms, the red LED seems to be continuously on, provided the RS485 interface is working well. In case of problems, the red LED will stay off, however.
+#### First test: Hardware and Wiring ####
+- **[Master:](examples/Basic-test-Master/Basic-test-Master.ino)** At startup, the red onboard LED is switched on, to indicate there is power and the program runs. Every second, the master sends the "A" character via RS485 to the slave(s). Tests should be performed using different baudrates (see the sketch for details).
+- **[Slave:](examples/Basic-test-Slaves/Basic-test-Slaves.ino)** Everytime this "A" character is received, the green LED changes between ON andf OFF. If there is an error, the yellow LED is switched ON; if there are multiple errors, also the blue LED is switched ON. It is possible to connect multiple slaves in parallel to the RS485 bus.
 
-- **Slave:** before compilation, the address of the slave must be set. The address with value 1 is for the Button Controller (the default test); value 2 is for the IR-Sensor. <br>
+#### Second test: Library ####
+- **[Master:](examples/Test-Master/Test-Master.ino)** at startup, the red onboard LED will be switched on. Every 100 ms the master will send a RS485 message to the slave, and switch its own red LED off. After the slave receives the RS485 message, it will immediately return a reply message. Once the reply message from the slave is received by the master, the red master LED will be switched on again. Since the reply message should be received within a few ms, the red LED seems to be continuously on, provided the RS485 interface is working well. In case of problems, the red LED will stay off, however.
+
+- **[Slave:](examples/Test-Slave/Test-Slave.ino)** before compilation, the address of the slave must be set. The address with value 1 is for the Button Controller (the default test); value 2 is for the IR-Sensor. <br>
 At startup, the slave will turn its red (onboard) LED off. Every 100ms the slave should receive from the master a RS485 message. Immediately after reception of that RS485 message, the slave will toggle its red LED. Therefore, if the RS485 interface is working well, the red LED should blink 10 times per second. In case of problems, the red LED will stay on or off, however.
 
 ## Dependencies ##
